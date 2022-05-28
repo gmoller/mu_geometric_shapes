@@ -32,19 +32,31 @@ impl Rectangle {
     }
 
     pub fn top_left(&self) -> Vector2D<f64> {
-        Vector2D::new(self.center.x - self.dimensions.x / 2.0, self.center.y + self.dimensions.y / 2.0)
+        Vector2D::new(
+            self.center.x - self.dimensions.x / 2.0,
+            self.center.y + self.dimensions.y / 2.0,
+        )
     }
 
     pub fn top_right(&self) -> Vector2D<f64> {
-        Vector2D::new(self.center.x + self.dimensions.x / 2.0, self.center.y + self.dimensions.y / 2.0)
+        Vector2D::new(
+            self.center.x + self.dimensions.x / 2.0,
+            self.center.y + self.dimensions.y / 2.0,
+        )
     }
 
     pub fn bottom_left(&self) -> Vector2D<f64> {
-        Vector2D::new(self.center.x - self.dimensions.x / 2.0, self.center.y - self.dimensions.y / 2.0)
+        Vector2D::new(
+            self.center.x - self.dimensions.x / 2.0,
+            self.center.y - self.dimensions.y / 2.0,
+        )
     }
 
     pub fn bottom_right(&self) -> Vector2D<f64> {
-        Vector2D::new(self.center.x + self.dimensions.x / 2.0, self.center.y - self.dimensions.y / 2.0)
+        Vector2D::new(
+            self.center.x + self.dimensions.x / 2.0,
+            self.center.y - self.dimensions.y / 2.0,
+        )
     }
 
     /// Signed distance functions are passed the coordinates of a point in space and return the
@@ -142,6 +154,9 @@ mod tests {
         assert_eq!(rectangle.sdf(&Vector2D::new(0.0, 0.0)), 0.0);
 
         assert_eq!(rectangle.sdf(&Vector2D::new(10.0, -10.0)), 10.0);
-        assert_eq!(rectangle.sdf(&Vector2D::new(-2.0, -2.0)), 2.8284271247461903);
+        assert_eq!(
+            rectangle.sdf(&Vector2D::new(-2.0, -2.0)),
+            2.8284271247461903
+        );
     }
 }
