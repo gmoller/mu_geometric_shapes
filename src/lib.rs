@@ -35,4 +35,23 @@ mod tests {
         assert_eq!(circle1 == circle2, true);
         assert_eq!(circle1 != circle3, true);
     }
+
+    #[test]
+    fn circle_sdf() {
+        let circle = Circle::new(Vector2D::new(10.0, 0.0), 10.0);
+
+        assert_eq!(circle.sdf(Vector2D::new(0.0, 0.0)), 0.0);
+        assert_eq!(circle.sdf(Vector2D::new(10.0, 0.0)), -10.0);
+        assert_eq!(circle.sdf(Vector2D::new(0.0, 10.0)), 4.142135623730951);
+        assert_eq!(circle.sdf(Vector2D::new(-10.0, 20.0)), 18.284271247461902);
+    }
+
+    // #[test]
+    // fn circle_sdf() {
+    //     let circle = Circle::new(Vector2D::new(0.0, 0.0), 10.0);
+    //
+    //     assert_eq!(circle.sdf(Vector2D::new(0.0, 0.0)), -10.0);
+    //     assert_eq!(circle.sdf(Vector2D::new(10.0, 0.0)), 0.0);
+    //     assert_eq!(circle.sdf(Vector2D::new(-20.0, 20.0)), 18.284271247461902);
+    // }
 }
