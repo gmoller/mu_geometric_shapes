@@ -1,10 +1,10 @@
 use crate::{abs_vector, length_vector, max_float, max_vector, Shape};
 use vector2d::Vector2D;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Rectangle {
-    center: Vector2D<f64>,
-    dimensions: Vector2D<f64>,
+    pub(crate) center: Vector2D<f64>,
+    pub(crate) dimensions: Vector2D<f64>,
 }
 
 impl Rectangle {

@@ -85,7 +85,6 @@ mod tests {
         let circle = Circle::new(Vector2D::new(10.0, 10.0), 10.0);
 
         assert_eq!(get_sdf(&circle, &Vector2D::new(10.0, 10.0)), -10.0); // center
-                                                                         //assert_eq!(circle.sdf(&Vector2D::new(10.0, 10.0)), -10.0); // center
         assert_eq!(circle.sdf(&Vector2D::new(5.0, 5.0)), -2.9289321881345245);
 
         assert_eq!(circle.sdf(&Vector2D::new(10.0, 0.0)), 0.0);

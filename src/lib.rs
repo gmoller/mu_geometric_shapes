@@ -1,9 +1,11 @@
 use crate::circle::Circle;
 use crate::rectangle::Rectangle;
 use vector2d::Vector2D;
+use crate::rectangle_rounded::{RectangleRounded, RoundFactors};
 
 pub mod circle;
 pub mod rectangle;
+pub mod rectangle_rounded;
 
 pub trait Shape {
     fn area(&self) -> f64;
@@ -24,6 +26,11 @@ impl ShapeFactory {
 
     pub fn new_rectangle(center: Vector2D<f64>, dimensions: Vector2D<f64>) -> Box<dyn Shape> {
         Box::new(Rectangle::new(center, dimensions))
+    }
+
+    pub fn new_rectangle_rounded(center: Vector2D<f64>, dimensions: Vector2D<f64>, round_factors: RoundFactors) -> Box<dyn Shape> {
+        let rectangle = Rectangle::new(center, dimensions);
+        Box::new(RectangleRounded::new(rectangle, round_factors))
     }
 }
 
