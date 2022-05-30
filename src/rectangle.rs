@@ -1,3 +1,4 @@
+use crate::{abs_vector, length_vector, max_float, max_vector, Shape};
 use vector2d::Vector2D;
 
 #[derive(Debug, PartialEq)]
@@ -17,10 +18,6 @@ impl Rectangle {
 
     pub fn dimensions(&self) -> Vector2D<f64> {
         self.dimensions
-    }
-
-    pub fn area(&self) -> f64 {
-        self.dimensions.x * self.dimensions.y
     }
 
     pub fn width(&self) -> f64 {
@@ -58,45 +55,28 @@ impl Rectangle {
             self.center.y - self.dimensions.y / 2.0,
         )
     }
+}
 
-    /// Signed distance functions are passed the coordinates of a point in space and return the
-    /// shortest distance between that point and some surface.
-    /// The sign of the return value indicates whether the point is inside that surface (negative)
-    /// or outside (positive). A return value of zero indicates the point is exactly on the surface.
-    pub fn sdf(&self, point: &Vector2D<f64>) -> f64 {
+impl Shape for Rectangle {
+    fn area(&self) -> f64 {
+        self.dimensions.x * self.dimensions.y
+    }
+
+    fn sdf(&self, point: &Vector2D<f64>) -> f64 {
         // translate to center the rectangle at origin
         let translated = *point - self.center;
 
         let top_right = self.dimensions / 2.0;
         let d = abs_vector(&translated) - top_right;
 
-        length_vector(&max_vector(&d, 0.0)) + min_float(max_float(d.x, d.y), 0.0)
+        length_vector(&max_vector(&d, 0.0)) + crate::min_float(max_float(d.x, d.y), 0.0)
     }
-}
-
-fn abs_vector(v: &Vector2D<f64>) -> Vector2D<f64> {
-    Vector2D::new(v.x.abs(), v.y.abs())
-}
-
-fn length_vector(v: &Vector2D<f64>) -> f64 {
-    v.length()
-}
-
-fn max_vector(v: &Vector2D<f64>, scalar: f64) -> Vector2D<f64> {
-    Vector2D::new(v.x.max(scalar), v.y.max(scalar))
-}
-
-fn min_float(v1: f64, v2: f64) -> f64 {
-    v1.min(v2)
-}
-
-fn max_float(v1: f64, v2: f64) -> f64 {
-    v1.max(v2)
 }
 
 #[cfg(test)]
 mod tests {
     use crate::rectangle::Rectangle;
+    use crate::{get_area, Shape};
     use vector2d::Vector2D;
 
     #[test]
@@ -113,7 +93,8 @@ mod tests {
         assert_eq!(rectangle.dimensions().x, 20.0);
         assert_eq!(rectangle.dimensions().y, 20.0);
 
-        assert_eq!(rectangle.area(), 400.0);
+        assert_eq!(get_area(&rectangle), 400.0);
+        //assert_eq!(rectangle.area(), 400.0);
 
         assert_eq!(rectangle.width(), 20.0);
         assert_eq!(rectangle.height(), 20.0);
