@@ -1,6 +1,6 @@
-use vector2d::Vector2D;
 use crate::circle::Circle;
 use crate::rectangle::Rectangle;
+use vector2d::Vector2D;
 
 pub mod circle;
 pub mod rectangle;
@@ -18,7 +18,7 @@ pub trait Shape {
 pub struct ShapeFactory;
 
 impl ShapeFactory {
-    pub fn new_circle(center: Vector2D<f64>, radius: f64)-> Box<dyn Shape> {
+    pub fn new_circle(center: Vector2D<f64>, radius: f64) -> Box<dyn Shape> {
         Box::new(Circle::new(center, radius))
     }
 
@@ -51,6 +51,6 @@ pub fn get_area<T: Shape>(t: &T) -> f64 {
     t.area()
 }
 
-// pub fn get_sdf<T: Shape>(t: &T, p: &Vector2D<f64>) -> f64 {
-//     t.sdf(p)
-// }
+pub fn get_sdf<T: Shape>(t: &T, p: &Vector2D<f64>) -> f64 {
+    t.sdf(p)
+}
