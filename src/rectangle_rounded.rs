@@ -36,11 +36,11 @@ impl RectangleRounded {
     }
 
     pub fn center(&self) -> Vector2D<f64> {
-        self.rectangle.center
+        self.rectangle.center()
     }
 
     pub fn dimensions(&self) -> Vector2D<f64> {
-        self.rectangle.dimensions
+        self.rectangle.dimensions()
     }
 
     pub fn round_factors(&self) -> RoundFactors {
@@ -53,11 +53,11 @@ impl RectangleRounded {
     }
 
     pub fn width(&self) -> f64 {
-        self.rectangle.dimensions.x
+        self.rectangle.width()
     }
 
     pub fn height(&self) -> f64 {
-        self.rectangle.dimensions.y
+        self.rectangle.height()
     }
 }
 
@@ -70,6 +70,16 @@ impl Shape for RectangleRounded {
         let r_squared = (r_squared1 + r_squared2 + r_squared3 + r_squared4) / 4.0;
 
         self.rectangle.area() - 4.0 * r_squared + PI * r_squared
+    }
+
+    fn perimeter(&self) -> f64 {
+        let r1 = self.round_factors.top_left;
+        let r2 = self.round_factors.top_right;
+        let r3 = self.round_factors.bottom_left;
+        let r4 = self.round_factors.bottom_right;
+        let r = (r1 + r2 + r3 + r4) / 4.0;
+
+        self.rectangle.perimeter() - 8.0 * r + 2.0 * PI * r
     }
 
     fn sdf(&self, point: &Vector2D<f64>) -> f64 {
@@ -87,9 +97,7 @@ impl Shape for RectangleRounded {
             r = self.round_factors.bottom_left
         }
 
-        //println!("Hello r is {r}!");
-
-        let top_right = self.dimensions() / 2.0;
+        let top_right = self.dimensions() * 0.5;
         let q = abs_vector(&translated) - top_right + Vector2D::new(r, r);
 
         length_vector(&max_vector(&q, 0.0)) + min_float(max_float(q.x, q.y), 0.0) - r
@@ -121,6 +129,7 @@ mod tests {
 
         assert_eq!(get_area(&rectangle_rounded), 396.5663706143592);
         //assert_eq!(rectangle_rounded.area(), 396.5663706143592);
+        assert_eq!(rectangle_rounded.perimeter(), 76.56637061435917);
 
         assert_eq!(rectangle_rounded.width(), 20.0);
         assert_eq!(rectangle_rounded.height(), 20.0);
@@ -154,7 +163,10 @@ mod tests {
 
         assert_eq!(rectangle_rounded.sdf(&Vector2D::new(10.0, 0.0)), 0.0);
         assert_eq!(rectangle_rounded.sdf(&Vector2D::new(0.0, 10.0)), 0.0);
-        assert_eq!(rectangle_rounded.sdf(&Vector2D::new(0.0, 0.0)), 0.8284271247461903);
+        assert_eq!(
+            rectangle_rounded.sdf(&Vector2D::new(0.0, 0.0)),
+            0.8284271247461903
+        );
 
         assert_eq!(rectangle_rounded.sdf(&Vector2D::new(10.0, -10.0)), 10.0);
         assert_eq!(

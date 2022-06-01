@@ -35,6 +35,10 @@ impl Shape for Circle {
         consts::PI * self.radius.powf(2.0)
     }
 
+    fn perimeter(&self) -> f64 {
+        self.circumference()
+    }
+
     fn sdf(&self, point: &Vector2D<f64>) -> f64 {
         // translate to center the circle at origin
         let translated = *point - self.center;
@@ -64,6 +68,7 @@ mod tests {
 
         assert_eq!(get_area(&circle), 314.1592653589793);
         //assert_eq!(circle.area(), 314.1592653589793);
+        assert_eq!(circle.perimeter(), 62.83185307179586);
 
         assert_eq!(circle.circumference(), 62.83185307179586);
 

@@ -1,10 +1,10 @@
-use crate::{abs_vector, length_vector, max_float, max_vector, Shape};
+use crate::{abs_vector, length_vector, max_float, max_vector, min_float, Shape};
 use vector2d::Vector2D;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Rectangle {
-    pub(crate) center: Vector2D<f64>,
-    pub(crate) dimensions: Vector2D<f64>,
+    center: Vector2D<f64>,
+    dimensions: Vector2D<f64>,
 }
 
 impl Rectangle {
@@ -30,29 +30,29 @@ impl Rectangle {
 
     pub fn top_left(&self) -> Vector2D<f64> {
         Vector2D::new(
-            self.center.x - self.dimensions.x / 2.0,
-            self.center.y + self.dimensions.y / 2.0,
+            self.center.x - self.dimensions.x * 0.5,
+            self.center.y + self.dimensions.y * 0.5,
         )
     }
 
     pub fn top_right(&self) -> Vector2D<f64> {
         Vector2D::new(
-            self.center.x + self.dimensions.x / 2.0,
-            self.center.y + self.dimensions.y / 2.0,
+            self.center.x + self.dimensions.x * 0.5,
+            self.center.y + self.dimensions.y * 0.5,
         )
     }
 
     pub fn bottom_left(&self) -> Vector2D<f64> {
         Vector2D::new(
-            self.center.x - self.dimensions.x / 2.0,
-            self.center.y - self.dimensions.y / 2.0,
+            self.center.x - self.dimensions.x * 0.5,
+            self.center.y - self.dimensions.y * 0.5,
         )
     }
 
     pub fn bottom_right(&self) -> Vector2D<f64> {
         Vector2D::new(
-            self.center.x + self.dimensions.x / 2.0,
-            self.center.y - self.dimensions.y / 2.0,
+            self.center.x + self.dimensions.x * 0.5,
+            self.center.y - self.dimensions.y * 0.5,
         )
     }
 }
@@ -62,14 +62,18 @@ impl Shape for Rectangle {
         self.dimensions.x * self.dimensions.y
     }
 
+    fn perimeter(&self) -> f64 {
+        (self.dimensions.x + self.dimensions.y) * 2.0
+    }
+
     fn sdf(&self, point: &Vector2D<f64>) -> f64 {
         // translate to center the rectangle at origin
         let translated = *point - self.center;
 
-        let top_right = self.dimensions / 2.0;
+        let top_right = self.dimensions * 0.5;
         let d = abs_vector(&translated) - top_right;
 
-        length_vector(&max_vector(&d, 0.0)) + crate::min_float(max_float(d.x, d.y), 0.0)
+        length_vector(&max_vector(&d, 0.0)) + min_float(max_float(d.x, d.y), 0.0)
     }
 }
 
@@ -95,6 +99,7 @@ mod tests {
 
         assert_eq!(get_area(&rectangle), 400.0);
         //assert_eq!(rectangle.area(), 400.0);
+        assert_eq!(rectangle.perimeter(), 80.0);
 
         assert_eq!(rectangle.width(), 20.0);
         assert_eq!(rectangle.height(), 20.0);
