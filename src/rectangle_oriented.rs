@@ -117,14 +117,32 @@ mod tests {
         let rectangle_oriented = RectangleOriented::new(rectangle, 45.0);
 
         assert_eq!(rectangle_oriented.sdf(&Vector2D::new(10.0, 10.0)), -10.0); // center
-        assert_eq!(rectangle_oriented.sdf(&Vector2D::new(10.0, 8.0)), -8.585786437626904);
-        assert_eq!(rectangle_oriented.sdf(&Vector2D::new(5.0, 5.0)), -2.9289321881345245);
+        assert_eq!(
+            rectangle_oriented.sdf(&Vector2D::new(10.0, 8.0)),
+            -8.585786437626904
+        );
+        assert_eq!(
+            rectangle_oriented.sdf(&Vector2D::new(5.0, 5.0)),
+            -2.9289321881345245
+        );
 
-        assert_eq!(rectangle_oriented.sdf(&Vector2D::new(10.0, 0.0)), -2.9289321881345245);
-        assert_eq!(rectangle_oriented.sdf(&Vector2D::new(0.0, 10.0)), -2.9289321881345245);
-        assert_eq!(rectangle_oriented.sdf(&Vector2D::new(0.0, 0.0)), 4.142135623730951);
+        assert_eq!(
+            rectangle_oriented.sdf(&Vector2D::new(10.0, 0.0)),
+            -2.9289321881345245
+        );
+        assert_eq!(
+            rectangle_oriented.sdf(&Vector2D::new(0.0, 10.0)),
+            -2.9289321881345245
+        );
+        assert_eq!(
+            rectangle_oriented.sdf(&Vector2D::new(0.0, 0.0)),
+            4.142135623730951
+        );
 
-        assert_eq!(rectangle_oriented.sdf(&Vector2D::new(10.0, -10.0)), 5.857864376269049);
+        assert_eq!(
+            rectangle_oriented.sdf(&Vector2D::new(10.0, -10.0)),
+            5.857864376269049
+        );
         assert_eq!(
             rectangle_oriented.sdf(&Vector2D::new(-2.0, -2.0)),
             6.970562748477143
