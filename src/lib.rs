@@ -1,9 +1,9 @@
 use crate::circle::Circle;
+use crate::hexagon::Hexagon;
 use crate::rectangle::Rectangle;
 use crate::rectangle_oriented::RectangleOriented;
 use crate::rectangle_rounded::{RectangleRounded, RoundFactors};
 use vector2d::Vector2D;
-use crate::hexagon::Hexagon;
 
 pub mod circle;
 pub mod hexagon;
@@ -26,7 +26,7 @@ pub trait Shape {
 #[derive(Debug, PartialEq)]
 pub enum HexagonOrientation {
     Horizontal, // pointy
-    Vertical, // flat
+    Vertical,   // flat
 }
 
 pub struct ShapeFactory;
@@ -37,11 +37,19 @@ impl ShapeFactory {
     }
 
     pub fn new_hexagon_vertical(center: Vector2D<f64>, circumradius: f64) -> Box<dyn Shape> {
-        Box::new(Hexagon::new(center, circumradius, HexagonOrientation::Vertical))
+        Box::new(Hexagon::new(
+            center,
+            circumradius,
+            HexagonOrientation::Vertical,
+        ))
     }
 
     pub fn new_hexagon_horizontal(center: Vector2D<f64>, circumradius: f64) -> Box<dyn Shape> {
-        Box::new(Hexagon::new(center, circumradius, HexagonOrientation::Horizontal))
+        Box::new(Hexagon::new(
+            center,
+            circumradius,
+            HexagonOrientation::Horizontal,
+        ))
     }
 
     pub fn new_rectangle(center: Vector2D<f64>, dimensions: Vector2D<f64>) -> Box<dyn Shape> {
@@ -99,14 +107,17 @@ fn rotate_vector_by_radians(v: &Vector2D<f64>, radians: f64) -> Vector2D<f64> {
 }
 
 fn rotate_vector_by_30_degrees(v: &Vector2D<f64>) -> Vector2D<f64> {
-    Vector2D::new(v.x * 0.86602540378 - v.y * 0.5, v.x * 0.5 + v.y * 0.86602540378)
+    Vector2D::new(
+        v.x * 0.86602540378 - v.y * 0.5,
+        v.x * 0.5 + v.y * 0.86602540378,
+    )
 }
 
-fn min_float(v1: f64, v2: f64) -> f64 {
+fn min_f64(v1: f64, v2: f64) -> f64 {
     v1.min(v2)
 }
 
-fn max_float(v1: f64, v2: f64) -> f64 {
+fn max_f64(v1: f64, v2: f64) -> f64 {
     v1.max(v2)
 }
 

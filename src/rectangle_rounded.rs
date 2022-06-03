@@ -1,4 +1,4 @@
-use crate::{abs_vector, length_vector, max_float, max_vector, min_float, Rectangle, Shape};
+use crate::{abs_vector, length_vector, max_f64, max_vector, min_f64, Rectangle, Shape};
 use std::f64::consts::PI;
 use vector2d::Vector2D;
 
@@ -100,7 +100,7 @@ impl Shape for RectangleRounded {
         let top_right = self.dimensions() * 0.5;
         let q = abs_vector(&translated) - top_right + Vector2D::new(r, r);
 
-        length_vector(&max_vector(&q, 0.0)) + min_float(max_float(q.x, q.y), 0.0) - r
+        length_vector(&max_vector(&q, 0.0)) + min_f64(max_f64(q.x, q.y), 0.0) - r
     }
 }
 

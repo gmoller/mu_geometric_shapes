@@ -1,6 +1,6 @@
 use crate::{
-    abs_vector, length_vector, max_float, max_vector, min_float, rotate_vector_by_degrees,
-    Rectangle, Shape,
+    abs_vector, length_vector, max_f64, max_vector, min_f64, rotate_vector_by_degrees, Rectangle,
+    Shape,
 };
 use vector2d::Vector2D;
 
@@ -53,7 +53,7 @@ impl Shape for RectangleOriented {
         let top_right = self.dimensions() * 0.5;
         let d = abs_vector(&rotated) - top_right;
 
-        length_vector(&max_vector(&d, 0.0)) + min_float(max_float(d.x, d.y), 0.0)
+        length_vector(&max_vector(&d, 0.0)) + min_f64(max_f64(d.x, d.y), 0.0)
     }
 }
 

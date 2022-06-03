@@ -1,4 +1,4 @@
-use crate::{abs_vector, length_vector, max_float, max_vector, min_float, Shape};
+use crate::{abs_vector, length_vector, max_f64, max_vector, min_f64, Shape};
 use vector2d::Vector2D;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -73,7 +73,7 @@ impl Shape for Rectangle {
         let top_right = self.dimensions * 0.5;
         let d = abs_vector(&translated) - top_right;
 
-        length_vector(&max_vector(&d, 0.0)) + min_float(max_float(d.x, d.y), 0.0)
+        length_vector(&max_vector(&d, 0.0)) + min_f64(max_f64(d.x, d.y), 0.0)
     }
 }
 
