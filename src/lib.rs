@@ -1,15 +1,11 @@
 use crate::circle::Circle;
 use crate::hexagon::Hexagon;
-use crate::rectangle::Rectangle;
-use crate::rectangle_oriented::RectangleOriented;
-use crate::rectangle_rounded::{RectangleRounded, RoundFactors};
+use crate::rectangle::{Rectangle, RoundFactors};
 use vector2d::Vector2D;
 
 pub mod circle;
 pub mod hexagon;
 pub mod rectangle;
-pub mod rectangle_oriented;
-pub mod rectangle_rounded;
 
 pub trait Shape {
     fn area(&self) -> f64;
@@ -53,7 +49,12 @@ impl ShapeFactory {
     }
 
     pub fn new_rectangle(center: Vector2D<f64>, dimensions: Vector2D<f64>) -> Box<dyn Shape> {
-        Box::new(Rectangle::new(center, dimensions))
+        Box::new(Rectangle::new(
+            center,
+            dimensions,
+            0.0,
+            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+        ))
     }
 
     pub fn new_rectangle_oriented(
@@ -61,9 +62,12 @@ impl ShapeFactory {
         dimensions: Vector2D<f64>,
         rotation_angle_in_degrees: f64,
     ) -> Box<dyn Shape> {
-        let rectangle = Rectangle::new(center, dimensions);
-
-        Box::new(RectangleOriented::new(rectangle, rotation_angle_in_degrees))
+        Box::new(Rectangle::new(
+            center,
+            dimensions,
+            rotation_angle_in_degrees,
+            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+        ))
     }
 
     pub fn new_rectangle_rounded(
@@ -71,9 +75,16 @@ impl ShapeFactory {
         dimensions: Vector2D<f64>,
         round_factors: RoundFactors,
     ) -> Box<dyn Shape> {
-        let rectangle = Rectangle::new(center, dimensions);
+        Box::new(Rectangle::new(center, dimensions, 0.0, round_factors))
+    }
 
-        Box::new(RectangleRounded::new(rectangle, round_factors))
+    pub fn new_rectangle_rounded_oriented(
+        center: Vector2D<f64>,
+        dimensions: Vector2D<f64>,
+        rotation_angle_in_degrees: f64,
+        round_factors: RoundFactors,
+    ) -> Box<dyn Shape> {
+        Box::new(Rectangle::new(center, dimensions, rotation_angle_in_degrees, round_factors))
     }
 }
 
@@ -96,7 +107,7 @@ fn dot_product(v1: &Vector2D<f64>, v2: &Vector2D<f64>) -> f64 {
 fn rotate_vector_by_degrees(v: &Vector2D<f64>, degrees: f64) -> Vector2D<f64> {
     let radians = degrees.to_radians();
 
-    rotate_vector_by_radians(&v, radians)
+    rotate_vector_by_radians(v, radians)
 }
 
 fn rotate_vector_by_radians(v: &Vector2D<f64>, radians: f64) -> Vector2D<f64> {
