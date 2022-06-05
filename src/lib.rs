@@ -1,9 +1,11 @@
 use crate::circle::Circle;
+use crate::grid_2d::Grid2D;
 use crate::hexagon::Hexagon;
 use crate::rectangle::{Rectangle, RoundFactors};
 use vector2d::Vector2D;
 
 pub mod circle;
+pub mod grid_2d;
 pub mod hexagon;
 pub mod rectangle;
 
@@ -49,12 +51,7 @@ impl ShapeFactory {
     }
 
     pub fn new_rectangle(center: Vector2D<f64>, dimensions: Vector2D<f64>) -> Box<dyn Shape> {
-        Box::new(Rectangle::new(
-            center,
-            dimensions,
-            0.0,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
-        ))
+        Box::new(Rectangle::new(center, dimensions, 0.0, Default::default()))
     }
 
     pub fn new_rectangle_oriented(
@@ -66,7 +63,7 @@ impl ShapeFactory {
             center,
             dimensions,
             rotation_angle_in_degrees,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+            Default::default(),
         ))
     }
 
@@ -84,7 +81,12 @@ impl ShapeFactory {
         rotation_angle_in_degrees: f64,
         round_factors: RoundFactors,
     ) -> Box<dyn Shape> {
-        Box::new(Rectangle::new(center, dimensions, rotation_angle_in_degrees, round_factors))
+        Box::new(Rectangle::new(
+            center,
+            dimensions,
+            rotation_angle_in_degrees,
+            round_factors,
+        ))
     }
 }
 
@@ -138,4 +140,18 @@ pub fn get_area<T: Shape>(t: &T) -> f64 {
 
 pub fn get_sdf<T: Shape>(t: &T, p: &Vector2D<f64>) -> f64 {
     t.sdf(p)
+}
+
+pub fn get_sdf_grid<T: Shape>(t: &T, width: usize, height: usize) -> Grid2D {
+    let mut grid = Grid2D::new(width, height);
+
+    for row in 0..height {
+        for column in 0..width {
+            let p: Vector2D<f64> = Vector2D::new(column as f64, (height as usize - 1 - row) as f64);
+            let sdf = t.sdf(&p);
+            grid.set_value(column, row, sdf);
+        }
+    }
+
+    grid
 }

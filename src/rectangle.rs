@@ -4,7 +4,7 @@ use crate::{
 use std::f64::consts::PI;
 use vector2d::Vector2D;
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct RoundFactors {
     top_left: f64,
     top_right: f64,
@@ -177,7 +177,7 @@ impl Shape for Rectangle {
 #[cfg(test)]
 mod tests {
     use crate::rectangle::Rectangle;
-    use crate::{get_area, RoundFactors, Shape};
+    use crate::{get_area, get_sdf_grid, RoundFactors, Shape};
     use vector2d::Vector2D;
 
     #[test]
@@ -186,7 +186,7 @@ mod tests {
             Vector2D::new(10.0, 10.0),
             Vector2D::new(20.0, 20.0),
             0.0,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+            Default::default(),
         );
 
         assert_eq!(
@@ -225,7 +225,7 @@ mod tests {
             Vector2D::new(10.0, 10.0),
             Vector2D::new(20.0, 20.0),
             45.0,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+            Default::default(),
         );
 
         assert_eq!(
@@ -291,19 +291,19 @@ mod tests {
             Vector2D::new(10.0, 10.0),
             Vector2D::new(20.0, 20.0),
             0.0,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+            Default::default(),
         );
         let rectangle2 = Rectangle::new(
             Vector2D::new(10.0, 10.0),
             Vector2D::new(20.0, 20.0),
             0.0,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+            Default::default(),
         );
         let rectangle3 = Rectangle::new(
             Vector2D::new(11.0, 11.0),
             Vector2D::new(22.0, 22.0),
             0.0,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+            Default::default(),
         );
 
         assert_eq!(rectangle1 == rectangle2, true);
@@ -316,7 +316,7 @@ mod tests {
             Vector2D::new(10.0, 10.0),
             Vector2D::new(20.0, 20.0),
             0.0,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+            Default::default(),
         );
 
         assert_eq!(rectangle.sdf(&Vector2D::new(10.0, 10.0)), -10.0); // center
@@ -340,7 +340,7 @@ mod tests {
             Vector2D::new(10.0, 10.0),
             Vector2D::new(20.0, 20.0),
             45.0,
-            RoundFactors::new(0.0, 0.0, 0.0, 0.0),
+            Default::default(),
         );
 
         assert_eq!(rectangle_oriented.sdf(&Vector2D::new(10.0, 10.0)), -10.0); // center
@@ -401,5 +401,29 @@ mod tests {
             rectangle_rounded.sdf(&Vector2D::new(-2.0, -2.0)),
             3.6568542494923806
         );
+    }
+
+    #[test]
+    fn rectangle_sdf_grid() {
+        let rectangle = Rectangle::new(
+            Vector2D::new(1.0, 1.0),
+            Vector2D::new(1.0, 1.0),
+            0.0,
+            Default::default(),
+        );
+
+        let sdf_grid = get_sdf_grid(&rectangle, 3, 3);
+
+        assert_eq!(sdf_grid.get_value(0, 0), 0.7071067811865476);
+        assert_eq!(sdf_grid.get_value(1, 0), 0.5);
+        assert_eq!(sdf_grid.get_value(2, 0), 0.7071067811865476);
+
+        assert_eq!(sdf_grid.get_value(0, 1), 0.5);
+        assert_eq!(sdf_grid.get_value(1, 1), -0.5);
+        assert_eq!(sdf_grid.get_value(2, 1), 0.5);
+
+        assert_eq!(sdf_grid.get_value(0, 2), 0.7071067811865476);
+        assert_eq!(sdf_grid.get_value(1, 2), 0.5);
+        assert_eq!(sdf_grid.get_value(2, 2), 0.7071067811865476);
     }
 }
