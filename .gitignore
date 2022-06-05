@@ -1,2 +1,4 @@
 /target
 /Cargo.lock
+/.idea
+mu_geometric_shapes.iml
